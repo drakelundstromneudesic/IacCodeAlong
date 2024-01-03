@@ -1,0 +1,22 @@
+name: deploy infra and app to azure
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  validate-credentials:
+    name: Validate azure credentials
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Log in to azure
+        run: |
+          az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: log out of azure
+        run: |
+          az logout
+      
